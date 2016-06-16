@@ -1,0 +1,148 @@
+﻿@model eSaleModel.Order
+
+@{
+    ViewBag.Title = "修改訂單";
+}
+
+<h2>Update</h2>
+
+@using (Html.BeginForm("Update", "Order", FormMethod.Post))
+{
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="OrderId">訂單編號</label>
+                <input type="text" class="form-control" id="OrderId" name="OrderId" value=@ViewBag.Id readonly>
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="CustId">客戶名稱</label>
+                <select class="form-control" id="CustId" name="CustId">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.Cus)
+                    {
+                        if (item.Value == ViewBag.Order.CustId)
+                        {
+                            <option value=@item.Value selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value=@item.Value>@item.Text</option>
+                        }
+                    }
+                </select>
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="EmpId">負責員工</label>
+                <select class="form-control" id="EmpId" name="EmpId">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.Emp)
+                    {
+                        if (item.Value == Convert.ToString(ViewBag.Order.EmpId))
+                        {
+                            <option value=@item.Value selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value=@item.Value>@item.Text</option>
+                        }
+                    }
+                </select>
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="Orderdate">訂單日期</label>
+                <input type="date" class="form-control" id="Orderdate" name="Orderdate" required="required" value="@ViewBag.Orderdate">
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="RequiredDate">需要日期</label>
+                <input type="date" class="form-control" id="RequiredDate" name="RequiredDate" required="required" value="@ViewBag.RequiredDate">
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShippedDate">出貨日期</label>
+                <input type="date" class="form-control" id="ShippedDate" name="ShippedDate" value="@ViewBag.ShippedDate">
+            </div><br>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ShipperId">出貨公司名稱</label>
+        <select class="form-control" id="ShipperId" name="ShipperId">
+            @foreach (var item in (List<SelectListItem>)ViewBag.Ship)
+            {
+                if (item.Value == Convert.ToString(ViewBag.Order.ShipperId))
+                {
+                    <option value=@item.Value selected>@item.Text</option>
+                }
+                else
+                {
+                    <option value=@item.Value>@item.Text</option>
+                }
+            }
+        </select>
+    </div><br>
+    <div class="form-group">
+        <label for="Freight">運費</label>
+        <input type="text" class="form-control" id="Freight" name="Freight" required="required" value="@ViewBag.Order.Freight">
+    </div><br>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipCountry">出貨國家</label>
+                <input type="text" class="form-control" id="ShipCountry" name="ShipCountry" required="required" value="@ViewBag.Order.ShipCountry">
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipCity">出貨城市</label>
+                <input type="text" class="form-control" id="ShipCity" name="ShipCity" required="required" value="@ViewBag.Order.ShipCity">
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipRegion">出貨地區</label>
+                <input type="text" class="form-control" id="ShipRegion" name="ShipRegion" value="@ViewBag.Order.ShipRegion">
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipPostalCode">郵遞區號</label>
+                <input type="text" class="form-control" id="ShipPostalCode" name="ShipPostalCode" value="@ViewBag.Order.ShipPostalCode">
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipAddress">出貨地址</label>
+                <input type="text" class="form-control" id="ShipAddress" name="ShipAddress" required="required" value="@ViewBag.Order.ShipAddress">
+            </div><br>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="ShipName">出貨說明</label>
+                <input type="text" class="form-control" id="ShipName" name="ShipName" required="required" value="@ViewBag.Order.ShipName">
+            </div><br>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">儲存</button>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

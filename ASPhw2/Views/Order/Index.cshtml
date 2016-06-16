@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="font-family:微軟正黑體">訂單查詢</h2>
+
+@using (Html.BeginForm("Index", "Order", FormMethod.Post))
+{ 
+    <div class="form-group">
+        <label for="OrderId">訂單編號</label>
+        <input type="text" class="form-control" id="OrderId" name="OrderId">
+    </div><br>
+    <div class="form-group">
+        <label for="CustName">客戶名稱</label>
+        <input type="text" class="form-control" id="CustName" name="CustName">
+    </div><br>
+    <div class="form-group">
+        <label for="EmpId">負責員工</label>
+        <select class="form-control" id="EmpId" name="EmpId">
+            <option value=""></option>
+            @foreach (var item in (List<SelectListItem>)ViewBag.Emp)
+            {
+                <option value=@item.Value>@item.Text</option>
+            }
+        </select>
+    </div><br>
+    <div class="form-group">
+        <label for="ShipperId">出貨公司</label>
+        <select class="form-control" id="ShipperId" name="ShipperId">
+            <option value=""></option>
+            @foreach (var item in (List<SelectListItem>)ViewBag.Ship)
+            {
+                <option value=@item.Value>@item.Text</option>
+            }
+        </select>
+    </div><br>
+    <div class="form-group">
+        <label for="Orderdate">訂購日期</label>
+        <input type="date" class="form-control" id="Orderdate" name="Orderdate">
+    </div><br>
+    <div class="form-group">
+        <label for="ShippedDate">發貨日期</label>
+        <input type="date" class="form-control" id="ShippedDate" name="ShippedDate">
+    </div><br>
+    <div class="form-group">
+        <label for="RequiredDate">需要日期</label>
+        <input type="date" class="form-control" id="RequiredDate" name="RequiredDate">
+    </div><div><br></div>
+    <button type="submit" class="btn btn-default">查詢</button>
+    <button type="reset" class="btn btn-default">清除</button>
+    <hr/>
+    <h3 style="font-family:微軟正黑體">查詢結果</h3>
+    <table class="table table-striped">
+        <thead><tr><th>訂單編號</th><th>客戶名稱</th><th>訂購日期</th><th>發貨日期</th><th></th><th></th></tr></thead>
+        @foreach (var item in (List<eSaleModel.Order>)ViewBag.Orderdata)
+        {
+            <tr id='@item.OrderId'>
+                <td>@item.OrderId</td>
+                <td>@item.CustName</td>
+                <td>@item.Orderdate</td>
+                <td>@item.ShippedDate</td>
+                <td>@Html.ActionLink("修改", "Update", new { id = item.OrderId })</td>
+                <td>
+                    <a class="btnDelete" href="#">刪除</a>
+                    <input class="hidOrderId" type="hidden" value='@item.OrderId' />
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+
+<script type="text/javascript">
+    $(".btnDelete").click(function (e) {
+        var tr = $(this).closest('tr')
+        $.ajax({
+            type: "POST",
+            url: "/Order/DeleteOrder",
+            data: "orderId=" + $(this).next().val(),
+            dataType: "json",
+            success: function (response) {
+                $(tr).remove();
+            }
+        });
+        return false;
+    });
+</script>
+

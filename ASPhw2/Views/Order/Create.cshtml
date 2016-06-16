@@ -1,0 +1,180 @@
+﻿@model eSaleModel.Order
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2 style="font-family:微軟正黑體">訂單新增</h2>
+<hr />
+
+@using (Html.BeginForm("Create", "Order", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="CustId">客戶名稱</label>
+                <select class="form-control" id="CustId" name="CustId">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.Cus)
+                    {
+                        <option value=@item.Value>@item.Text</option>
+                    }
+                </select>
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="EmpId">負責員工</label>
+                <select class="form-control" id="EmpId" name="EmpId">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.Emp)
+                    {
+                        <option value=@item.Value>@item.Text</option>
+                    }
+                </select>
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="Orderdate">訂單日期</label>
+                <input type="date" class="form-control" id="Orderdate" name="Orderdate" required="required">
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="RequiredDate">需要日期</label>
+                <input type="date" class="form-control" id="RequiredDate" name="RequiredDate" required="required">
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShippedDate">出貨日期</label>
+                <input type="date" class="form-control" id="ShippedDate" name="ShippedDate">
+            </div><br>
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <label for="ShipperId">出貨公司名稱</label>
+        <select class="form-control" id="ShipperId" name="ShipperId">
+            @foreach (var item in (List<SelectListItem>)ViewBag.Ship)
+            {
+                <option value=@item.Value>@item.Text</option>
+            }
+        </select>
+    </div><br>
+    <div class="form-group">
+        <label for="Freight">運費</label>
+        <input type="text" class="form-control" id="Freight" name="Freight" required="required">
+    </div><br>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipCountry">出貨國家</label>
+                <input type="text" class="form-control" id="ShipCountry" name="ShipCountry" required="required">
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipCity">出貨城市</label>
+                <input type="text" class="form-control" id="ShipCity" name="ShipCity" required="required">
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipRegion">出貨地區</label>
+                <input type="text" class="form-control" id="ShipRegion" name="ShipRegion">
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipPostalCode">郵遞區號</label>
+                <input type="text" class="form-control" id="ShipPostalCode" name="ShipPostalCode">
+            </div><br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipAddress">出貨地址</label>
+                <input type="text" class="form-control" id="ShipAddress" name="ShipAddress" required="required">
+            </div><br>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="ShipName">出貨說明</label>
+                <input type="text" class="form-control" id="ShipName" name="ShipName" required="required">
+            </div><br>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">儲存</button>
+
+
+<a id="addNewDetial" >新增一筆</a>
+<table class="table table-bordered">
+    <tr>
+        <td>商品</td>
+        <td>單價</td>
+        <td>數量</td>
+        <td>小計</td>
+        <td></td>
+    </tr>
+    <tbody id="tbContent">
+        <tr>
+            <td>
+                <select class="form-control" id="ProductId">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.Pro)
+                    {
+                        <option value=@item.Value>@item.Text</option>
+                    }
+                </select>
+            </td>
+            <td><input id="UnitPrice" type="number" value="0" min="0" style=" width: 50px;" /></td>
+            <td><input id="Qty" type="number" value="0" min="0" style=" width: 50px;" /></td>
+            <td><p id="Subtotal">0</p></td>
+            <td><button type="button" class="btnRemove">取消</button></td>
+        </tr>
+    </tbody>
+</table>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section scripts{ 
+    <script type="text/javascript">        //scripts區段
+        //明細資料範本
+        var trtemplate = $('#tbContent tr').eq(0).html(); //eq(0) 遍歷的第0個  html() 該元素的HTML內容(包括標籤)
+
+        //新增一列名資料
+        $("#addNewDetial").click(function (e) {
+            $('#tbContent').append('<tr>' + trtemplate + '</tr>');
+        });
+
+        //移除TR
+        $('#tbContent').on('click', '.btnRemove', function () {
+            if ($('#tbContent tr').length > 1)
+                $(this).closest('tr').remove(); //closest 遍歷當前的元素
+        });
+
+        //表單送出前置換element name 讓Action 可以讀到OrderDetials
+        $('form').submit(function () {
+            for (var i = 0 ; i < $('#tbContent tr').length; i++) {
+                $('#ProductId').eq(i).attr('name', 'orderDetails[' + i + '].ProductId'); //attr() 方法设置或返回被选元素的属性值。
+                $('#Qty').eq(i).attr('name', 'orderDetails[' + i + '].Qty');
+                $('#UnitPrice').eq(i).attr('name', 'orderDetails[' + i + '].UnitPrice');
+            }
+        });
+
+        $('Subtotal').change(function () {
+            alert("Handler for .change() called.");
+        });
+    </script>
+}
